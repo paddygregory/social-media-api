@@ -1,44 +1,44 @@
-# Web Framework
+
 fastapi>=0.104.0
 uvicorn[standard]>=0.24.0
 
-# Database
+
 sqlmodel>=0.0.8
 sqlalchemy>=2.0.0
 psycopg2-binary>=2.9.0
 
-# AI / OpenAI
+
 openai>=1.0.0
 
 # Background Tasks
 celery>=5.3.0
 redis>=5.0.0
 
-# Authentication & Security
+
 python-jose[cryptography]>=3.5.0
 passlib[bcrypt]>=1.7.4
 python-multipart>=0.0.6
 bcrypt<4.0
 
-# Environment Variables
+
 python-dotenv>=1.0.0
 
-# Data Validation
+
 pydantic>=2.0.0
 
-# Payments
+
 stripe>=7.0.0
 
-# Testing (not needed in production but harmless)
+
 pytest>=7.4.0
 pytest-asyncio>=0.21.0
 httpx>=0.25.0
 
-# Code Quality (optional for dev)
+
 black>=23.3.0
 isort>=5.12.0
 
-# Utilities
+
 python-dateutil>=2.8.2
 
 

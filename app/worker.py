@@ -11,7 +11,7 @@ import multiprocessing as mp
 try:
     mp.set_start_method("forkserver", force=True)
 except RuntimeError:
-    pass  # already set on import
+    pass  
   
 load_dotenv()
 
