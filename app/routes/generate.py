@@ -19,6 +19,7 @@ import json
 from app.auth import get_current_user
 from app.models import User
 from fastapi import Depends
+from app.celery_app import celery_app
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_AI_KEY"))

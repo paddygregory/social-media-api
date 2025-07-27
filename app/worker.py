@@ -1,20 +1,15 @@
-from celery import Celery
+
 from sqlmodel import Session
 from app.database import engine
 from app.models import Post, Job
 from app.routes.formatter import compose_post
 from datetime import datetime, timezone
-import os
-from dotenv import load_dotenv
-import multiprocessing as mp
-from app.routes.celery_routes import celery_app
+from app.celery_app import celery_app  
 
 
 @celery_app.task(bind=True)
 def generate_post(self, prompt: str, tone: str, length: str, user_id: int):
-    from app.models import Job
     job_id = self.request.id
-
     try:
         platforms = ['twitter', 'linkedin', 'instagram']
         outputs = {}
@@ -25,7 +20,6 @@ def generate_post(self, prompt: str, tone: str, length: str, user_id: int):
             outputs[platform] = result["content"]
             total_tokens += result["tokens_used"]
 
-        
         with Session(engine) as session:
             post = Post(
                 prompt=prompt,
@@ -58,11 +52,10 @@ def generate_post(self, prompt: str, tone: str, length: str, user_id: int):
                 session.commit()
         raise e
 
+
 @celery_app.task(bind=True)
 def generate_post_pro(self, prompt: str, tone: str, length: str, user_id: int):
-    from app.models import Job
     job_id = self.request.id
-
     try:
         platforms = ['twitter', 'linkedin', 'instagram', 'engagement tips']
         outputs = {}
@@ -73,7 +66,6 @@ def generate_post_pro(self, prompt: str, tone: str, length: str, user_id: int):
             outputs[platform] = result["content"]
             total_tokens += result["tokens_used"]
 
-        
         with Session(engine) as session:
             post = Post(
                 prompt=prompt,
@@ -105,4 +97,3 @@ def generate_post_pro(self, prompt: str, tone: str, length: str, user_id: int):
                 session.add(job)
                 session.commit()
         raise e
-    
