@@ -7,7 +7,7 @@ from app.database import engine
 from sqlmodel import Session
 
 load_dotenv()
-stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+stripe.api_key = os.getenv("STRIPE_API_KEY")
 payments_router = APIRouter()
 
 @payments_router.post("/checkout/{user_id}")
