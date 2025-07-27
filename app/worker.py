@@ -8,18 +8,28 @@ import os
 from dotenv import load_dotenv
 import multiprocessing as mp
 
-try:
-    mp.set_start_method("forkserver", force=True)
-except RuntimeError:
-    pass  
-  
-load_dotenv()
+from celery import Celery
+import os
+
+broker_url = os.getenv("REDIS_BROKER_URL")
+backend_url = os.getenv("REDIS_BACKEND_URL", broker_url)  # fallback to same
+
+# Inject Redis TLS options explicitly
+broker_use_ssl = {
+    "ssl_cert_reqs": "none"  # Use "required" or "optional" for stricter configs
+}
+backend_use_ssl = {
+    "ssl_cert_reqs": "none"
+}
 
 celery_app = Celery(
     "worker",
-    broker=os.getenv("REDIS_BROKER_URL"),
-    backend=os.getenv("REDIS_BACKEND_URL")
+    broker=broker_url,
+    backend=backend_url,
+    broker_use_ssl=broker_use_ssl if broker_url.startswith("rediss://") else None,
+    backend_use_ssl=backend_use_ssl if backend_url.startswith("rediss://") else None
 )
+
 
 @celery_app.task(bind=True)
 def generate_post(self, prompt: str, tone: str, length: str, user_id: int):
