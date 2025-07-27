@@ -18,3 +18,15 @@ services:
     env: python
     buildCommand: pip install -r requirements.txt
     startCommand: celery -A app.worker.celery_app worker --loglevel=info --pool=threads --concurrency=4
+    envVars:
+      - key: STRIPE_WEBHOOK_SECRET
+        fromEnvVar: STRIPE_WEBHOOK_SECRET
+      - key: SQL_KEY
+        fromEnvVar: SQL_KEY
+      - key: REDIS_BROKER_URL
+        fromEnvVar: REDIS_BROKER_URL
+      - key: REDIS_BACKEND_URL
+        fromEnvVar: REDIS_BACKEND_URL
+      - key: OPENAI_API_KEY
+        fromEnvVar: OPENAI_API_KEY
+
