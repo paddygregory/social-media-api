@@ -1,24 +1,13 @@
 services:
+  # ── Web (already present) ───────────────────────────
   - type: web
     name: backend
     env: python
-    plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: bash start.sh
-    envVars:
-      - key: STRIPE_WEBHOOK_SECRET
-        fromEnvVar: STRIPE_WEBHOOK_SECRET
-      - key: SQL_KEY
-        fromEnvVar: SQL_KEY
-      - key: REDIS_BROKER_URL
-        fromEnvVar: REDIS_BROKER_URL
-
-  - type: worker
-    name: celery-worker
-    env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: celery -A app.worker.celery_app worker --loglevel=info --pool=threads --concurrency=4
-    envVars:
+    startCommand: uvicorn app.main:app --host=0.0.0.0 --port=8000
+    envVars: &common_env   
+      - key: OPENAI_API_KEY
+        fromEnvVar: OPENAI_API_KEY
       - key: STRIPE_WEBHOOK_SECRET
         fromEnvVar: STRIPE_WEBHOOK_SECRET
       - key: SQL_KEY
@@ -27,6 +16,15 @@ services:
         fromEnvVar: REDIS_BROKER_URL
       - key: REDIS_BACKEND_URL
         fromEnvVar: REDIS_BACKEND_URL
-      - key: OPENAI_API_KEY
-        fromEnvVar: OPENAI_API_KEY
 
+  
+  - type: worker
+    name: celery-worker
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: >
+      celery -A app.worker.celery_app worker
+             --loglevel=info
+             --pool=threads
+             --concurrency=4
+    envVars: *common_env      
