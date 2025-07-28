@@ -28,7 +28,7 @@ def compose_post(prompt: str, platform: str, tone: str = "default", length: str 
         raise ValueError(f"Invalid platform: {platform}")
     
     response = client.chat.completions.create(
-        model = "gpt-3.5-turbo",
+        model = "gpt-4.0-mini",
         messages = [
             { "role": "system", "content": system_msg},
             { "role": "user", "content": f"Prompt: {prompt}; make this post in the tone: {tone}, and length: {length}"}
