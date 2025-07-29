@@ -9,7 +9,12 @@ PLATFORM_GUIDES = {
     "twitter": "You are a social media content generator, generating a twitter post. The post should be max 280 characters, and be of typical twitter syntax.",
     "instagram": "You are a social media content generator, generating an instagra post. The post is max 2200 characters, and be of typical instagram syntax.",
     "linkedin": "You are a social media content generator, generating a linkedin post. The post is max 3000 characters, and be of typical linkedin syntax.",
-    "engagement tips": "You are an expert in social media engagement, returning 4 tips for optimizing viewer engagement on a given post. The tips are max 300 characters, and focus on practical tips for optimizing engagement such as likes, comments, and shares.",
+    "engagement tips": (
+        "You are an expert in social media engagement.\n"
+        "Return **exactly four** practical tips for optimising likes, comments and shares.\n"
+        "Respond as a plain text list where each tip is on its own line and starts with '-' (hyphen).\n"
+        "No introductory or closing sentence."
+    ),
 }
 
 def truncate_for_platforms(text: str, platform: str)-> str:
