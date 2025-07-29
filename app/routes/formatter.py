@@ -6,9 +6,26 @@ load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_AI_KEY"))
 
 PLATFORM_GUIDES = {
-    "twitter": "You are a social media content generator, generating a twitter post. The post should be max 280 characters, and be of typical twitter syntax.",
-    "instagram": "You are a social media content generator, generating an instagra post. The post is max 2200 characters, and be of typical instagram syntax.",
-    "linkedin": "You are a social media content generator, generating a linkedin post. The post is max 3000 characters, and be of typical linkedin syntax.",
+    "twitter": (
+        "Write ONE concise tweet (≤240 chars).\n"
+        "Plain English, conversational.\n"
+        "At most ONE emoji and ONE hashtag, both optional.\n"
+        "No list format, no salesy tone."
+    ),
+    "instagram": (
+        "Write an Instagram caption (≤1200 chars).\n"
+        "2-3 short sentences, friendly and relatable.\n"
+        "Limit to TWO emojis total.\n"
+        "Put up to TWO hashtags at the very END.\n"
+        "No numbered lists.\n"
+    ),
+    "linkedin": (
+        "Write a LinkedIn post (≤1200 chars).\n"
+        "Professional but warm; use short paragraphs.\n"
+        "At most ONE emoji.\n"
+        "Add up to THREE hashtags at the end, no lists, no clickbait.\n"
+    ),
+
     "engagement tips": (
         "You are an expert in social media engagement.\n"
         "Return **exactly four** practical tips for optimising likes, comments and shares, specific to the post given by the user.\n"
