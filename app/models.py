@@ -5,6 +5,8 @@ from typing import Optional, Dict
 from datetime import datetime
 from sqlalchemy import JSON, Column, String, Boolean, Integer
 import psycopg2
+from pydantic import BaseModel
+
 
 class Post(SQLModel, table=True):
     __table_args__ = {"extend_existing": True}
@@ -39,3 +41,9 @@ class Feedback(SQLModel, table=True):
     name: str
     email: str
     feedback: str
+
+class FeedbackInput(BaseModel):
+    name: str
+    email: str
+    feedback: str
+
