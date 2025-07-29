@@ -5,10 +5,16 @@ from dotenv import load_dotenv
 from app.models import User, Feedback
 from app.database import engine
 from sqlmodel import Session
+from pydantic import BaseModel
 
 load_dotenv()
 stripe.api_key = os.getenv("STRIPE_API_KEY")
 payments_router = APIRouter()
+
+class FeedbackInput(BaseModel):
+    name: str
+    email: str
+    feedback: str
 
 @payments_router.post("/checkout/{user_id}")
 def create_checkout(user_id: int, tier: str = "pro"):
@@ -76,14 +82,18 @@ async def stripe_webhook(request: Request):
     return {"status": "success"}
 
 @payments_router.post("/feedback")
-def feedback(feedback: Feedback):
+def feedback(feedback_input: FeedbackInput):
     with Session(engine) as session:
         try:
+            feedback = Feedback(
+                name=feedback_input.name,
+                email=feedback_input.email,
+                feedback=feedback_input.feedback
+            )
             session.add(feedback)
             session.commit()
             session.refresh(feedback)
-            return {"status": "success"}
+            return {"status": "success", "id": feedback.id}
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
-    return {"status": "success"}
 
