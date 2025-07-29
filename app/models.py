@@ -33,3 +33,9 @@ class User(SQLModel, table=True):
     is_active: bool = Field(default=True, sa_column=Column(Boolean, nullable=False))
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
+
+class Feedback(SQLModel, table=True):
+    __table_args__ = {"extend_existing": True}
+    name: str
+    email: str
+    feedback: str

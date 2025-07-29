@@ -2,7 +2,7 @@
 import stripe, os
 from fastapi import APIRouter, HTTPException, Request
 from dotenv import load_dotenv
-from app.models import User
+from app.models import User, Feedback
 from app.database import engine
 from sqlmodel import Session
 
@@ -74,3 +74,16 @@ async def stripe_webhook(request: Request):
                 print(f"✅ User {user_id} upgraded to {tier}")
         
     return {"status": "success"}
+
+@payments_router.post("/feedback")
+def feedback(feedback: Feedback):
+    with Session(engine) as session:
+        try:
+            session.add(feedback)
+            session.commit()
+            session.refresh(feedback)
+            return {"status": "success"}
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+    return {"status": "success"}
+
