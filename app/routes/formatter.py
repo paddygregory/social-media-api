@@ -11,7 +11,7 @@ PLATFORM_GUIDES = {
     "linkedin": "You are a social media content generator, generating a linkedin post. The post is max 3000 characters, and be of typical linkedin syntax.",
     "engagement tips": (
         "You are an expert in social media engagement.\n"
-        "Return **exactly four** practical tips for optimising likes, comments and shares.\n"
+        "Return **exactly four** practical tips for optimising likes, comments and shares, specific to the post given by the user.\n"
         "Respond as a plain text list where each tip is on its own line and starts with '-' (hyphen).\n"
         "No introductory or closing sentence.\n"
         "Maximum 600 characters."
