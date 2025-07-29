@@ -3,7 +3,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from sqlmodel import SQLModel, Field, create_engine, Session
 from typing import Optional, Dict
 from datetime import datetime
-from sqlalchemy import JSON, Column, String, Boolean
+from sqlalchemy import JSON, Column, String, Boolean, Integer
 import psycopg2
 
 class Post(SQLModel, table=True):
@@ -35,7 +35,6 @@ class User(SQLModel, table=True):
     updated_at: datetime = Field(default_factory=datetime.now)
 
 class Feedback(SQLModel, table=True):
-    __table_args__ = {"extend_existing": True}
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str
     email: str
