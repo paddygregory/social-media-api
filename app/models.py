@@ -36,7 +36,7 @@ class User(SQLModel, table=True):
 
 class Feedback(SQLModel, table=True):
     __table_args__ = {"extend_existing": True}
-    id: int = Field(primary_key=True)
+    id: int = Field(primary_key=True, default=None, autoincrement=True)
     name: str
     email: str
     feedback: str
