@@ -71,18 +71,18 @@ def create_billing_portal(user_id: int):
             
             portal_session = stripe.billing_portal.Session.create(
                 customer=customer.id,
-                return_url=os.getenv("STRIPE_RETURN_URL", "http://localhost:3000/account")
+                return_url=os.getenv("STRIPE_RETURN_URL")
             )
             
             return {"portal_url": portal_session.url}
             
     except Exception as e:
-        print(f"❌ CRASH inside billing portal: {e}")
+        print(f" CRASH inside billing portal: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @payments_router.post("/webhook")
 async def stripe_webhook(request: Request):
-    print("📩 Stripe webhook received")
+    print("Stripe webhook received")
 
     try:
         payload = await request.body()
@@ -139,7 +139,7 @@ async def stripe_webhook(request: Request):
                 user.tier = "free"
                 session.add(user)
                 session.commit()
-                print(f"✅ User {user.id} downgraded to free")
+                print(f" User {user.id} downgraded to free")
         
     return {"status": "success"}
 
