@@ -20,25 +20,20 @@ class FeedbackInput(BaseModel):
 def create_checkout(user_id: int, tier: str = "pro"):
     try:
         if tier == "pro":
-            price = 500
+            price_id = os.getenv("STRIPE_PRICE_PRO")
             limit = 30
         elif tier == "unlimited":
-            price = 1000
+            price_id = os.getenv("STRIPE_PRICE_UNLIMITED")
             limit = 300
         else:
             raise HTTPException(status_code=400, detail="Invalid tier")
+
         session = stripe.checkout.Session.create(
-            payment_method_types = ["card"],
-            mode = "subscription",
-            line_items = [{
-                "price_data": {
-                    "currency": "usd",
-                    "unit_amount": price,
-                    "product_data": {
-                        "name": f"{tier.capitalize()} Plan- {limit} Posts/Month",
-                    },
-                }, 
-                "quantity": 1,
+            payment_method_types=["card"],
+            mode="subscription",
+            line_items=[{
+                "price": price_id,
+                "quantity": 1
             }],
             metadata={"user_id": str(user_id), "tier": tier},
             success_url=os.getenv("STRIPE_SUCCESS_URL"),
@@ -47,6 +42,7 @@ def create_checkout(user_id: int, tier: str = "pro"):
         return {"checkout_url": session.url}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+           
 
 @payments_router.post("/webhook")
 async def stripe_webhook(request: Request):
