@@ -65,7 +65,7 @@ def create_billing_portal(user_id: int):
                 session.add(user)
                 session.commit()
             else:
-                # Get existing customer
+                
                 customer = stripe.Customer.retrieve(user.stripe_customer_id)
             
             
