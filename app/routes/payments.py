@@ -29,7 +29,7 @@ def create_checkout(user_id: int, tier: str = "pro"):
             raise HTTPException(status_code=400, detail="Invalid tier")
         session = stripe.checkout.Session.create(
             payment_method_types = ["card"],
-            mode = "payment",
+            mode = "subscription",
             line_items = [{
                 "price_data": {
                     "currency": "usd",
