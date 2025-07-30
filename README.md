@@ -9,7 +9,7 @@ The following systems design template is what I used, supporting my tech stack o
 <img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/012ceb6d-cabc-4aec-acd7-0c43484db5a2" />
 
 
-Contact me with feedback or anything else at developer@paddygregory.com !!!
+Contact me with feedback or anything else at developer@paddymgregory.com !!!
 
 
 X -> https://x.com/paddygreg0ry
