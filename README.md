@@ -10,4 +10,6 @@ The following systems design template is what I used, supporting my tech stack o
 
 
 Contact me with feedback or anything else at developer@paddygregory.com !!!
+
+
 X -> https://x.com/paddygreg0ry
