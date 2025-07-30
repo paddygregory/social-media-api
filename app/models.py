@@ -32,6 +32,7 @@ class User(SQLModel, table=True):
     email: str
     password: str
     tier: str = Field(default="free", sa_column=Column(String))
+    stripe_customer_id: Optional[str] = Field(default=None, sa_column=Column(String))
     is_active: bool = Field(default=True, sa_column=Column(Boolean, nullable=False))
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
