@@ -41,6 +41,7 @@ def create_checkout(user_id: int, tier: str = "pro"):
         )
         return {"checkout_url": session.url}
     except Exception as e:
+        print(f"❌ CRASH inside create_checkout: {e}")
         raise HTTPException(status_code=500, detail=str(e))
            
 
