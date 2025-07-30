@@ -20,7 +20,7 @@ def create_db_and_tables():
             """))
             
             if not result.fetchone():
-                print("🔧 Adding stripe_customer_id column to user table...")
+                print("Adding stripe_customer_id column to user table")
                 connection.execute(text("""
                     ALTER TABLE "user" 
                     ADD COLUMN stripe_customer_id VARCHAR NULL;
