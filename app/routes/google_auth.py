@@ -33,7 +33,17 @@ async def login(request: Request):
 @google_router.get('/auth/google/callback')
 async def auth_google_callback(request: Request):
     token = await oauth.google.authorize_access_token(request)
-    user_info = await oauth.google.parse_id_token(request, token)
+    
+    # Try to get user info from ID token first, fallback to userinfo endpoint
+    try:
+        user_info = await oauth.google.parse_id_token(request, token)
+    except (KeyError, Exception):
+        # Fallback: get user info from Google's userinfo endpoint
+        resp = await oauth.google.get('https://www.googleapis.com/oauth2/v2/userinfo', token=token)
+        user_info = resp.json()
+        # Normalize field names - userinfo uses 'id' instead of 'sub'
+        if 'id' in user_info and 'sub' not in user_info:
+            user_info['sub'] = user_info['id']
 
     user = await get_or_create_user(user_info)
     jwt = create_access_token({'sub': str(user.id)})
