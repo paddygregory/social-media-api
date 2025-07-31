@@ -31,7 +31,7 @@ async def login(request: Request):
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
 @google_router.get('/auth/google/callback')
-async def auth_google_callback(request: Request):
+async def auth_google_callback(request: Request, client_type: str = "web"):
     token = await oauth.google.authorize_access_token(request)
     
     # Try to get user info from ID token first, fallback to userinfo endpoint
@@ -48,6 +48,13 @@ async def auth_google_callback(request: Request):
     user = await get_or_create_user(user_info)
     jwt = create_access_token({'sub': str(user.id)})
 
-    response = RedirectResponse(url=f"https://socialai.paddymgregory.com/login-success#token={jwt}")
+    # Different redirect URLs based on client type
+    if client_type == "extension":
+        # For Chrome extension - redirect to bridge page
+        response = RedirectResponse(url=f"https://socialai.paddymgregory.com/extension-oauth-bridge#token={jwt}")
+    else:
+        # For web application - existing behavior
+        response = RedirectResponse(url=f"https://socialai.paddymgregory.com/login-success#token={jwt}")
+    
     return response
 
