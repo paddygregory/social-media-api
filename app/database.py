@@ -2,7 +2,7 @@ from sqlmodel import create_engine, Session, SQLModel, text
 import os
 from dotenv import load_dotenv
 import psycopg2
-from app.models import Post, Job, Feedback, User
+from app.models import Post, Job, Feedback, User, get_or_create_user
 
 load_dotenv()
 

@@ -48,3 +48,13 @@ class FeedbackInput(BaseModel):
     email: str
     feedback: str
 
+async def get_or_create_user(user_info: dict):
+    email = user_info.get('email')
+    name = user_info.get('name', 'User')
+
+    with Session(engine) as session:
+        user = session.exec(select(User).where(User.email==email)).first()
+        if not user:
+            user = User(email=email, full_name=name, auth_provider='google')
+            session.add(user)
+            
