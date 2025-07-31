@@ -12,6 +12,7 @@ def create_db_and_tables():
     try:
         with engine.connect() as connection:
             
+            # Check and add stripe_customer_id column
             result = connection.execute(text("""
                 SELECT column_name 
                 FROM information_schema.columns 
@@ -22,6 +23,49 @@ def create_db_and_tables():
                 connection.execute(text("""
                     ALTER TABLE "user" 
                     ADD COLUMN stripe_customer_id VARCHAR NULL;
+                """))
+                connection.commit()
+            
+            # Check and add google_id column
+            result = connection.execute(text("""
+                SELECT column_name 
+                FROM information_schema.columns 
+                WHERE table_name = 'user' AND column_name = 'google_id'
+            """))
+            
+            if not result.fetchone():
+                connection.execute(text("""
+                    ALTER TABLE "user" 
+                    ADD COLUMN google_id VARCHAR NULL;
+                """))
+                connection.commit()
+            
+            # Check and add auth_provider column
+            result = connection.execute(text("""
+                SELECT column_name 
+                FROM information_schema.columns 
+                WHERE table_name = 'user' AND column_name = 'auth_provider'
+            """))
+            
+            if not result.fetchone():
+                connection.execute(text("""
+                    ALTER TABLE "user" 
+                    ADD COLUMN auth_provider VARCHAR DEFAULT 'local';
+                """))
+                connection.commit()
+            
+            # Make password column nullable for Google users
+            result = connection.execute(text("""
+                SELECT is_nullable 
+                FROM information_schema.columns 
+                WHERE table_name = 'user' AND column_name = 'password'
+            """))
+            
+            row = result.fetchone()
+            if row and row[0] == 'NO':
+                connection.execute(text("""
+                    ALTER TABLE "user" 
+                    ALTER COLUMN password DROP NOT NULL;
                 """))
                 connection.commit()
             
