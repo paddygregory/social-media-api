@@ -9,6 +9,7 @@ from app.routes.template import template_router
 from app.routes.generate import generate_router
 from app.routes.payments import payments_router
 from app.routes.auth2 import auth_router
+from app.routes.google_auth import google_router
 from app.database import create_db_and_tables, get_or_create_user
 
 
@@ -41,7 +42,7 @@ app.include_router(template_router)
 app.include_router(generate_router)
 app.include_router(payments_router)
 app.include_router(auth_router)
-
+app.include_router(google_router)
 
 if __name__ == "__main__":
     import uvicorn
