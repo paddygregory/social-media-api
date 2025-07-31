@@ -1,5 +1,4 @@
 
-# app/celery_app.py
 import os, ssl
 from celery import Celery
 

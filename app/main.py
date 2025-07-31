@@ -21,7 +21,6 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-# Add session middleware for OAuth
 app.add_middleware(
     SessionMiddleware, 
     secret_key=os.getenv("JWT_SECRET_KEY", "supersecret")
@@ -41,7 +40,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Routers
 app.include_router(health_router)
 app.include_router(template_router)
 app.include_router(generate_router)

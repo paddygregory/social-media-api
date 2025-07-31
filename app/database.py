@@ -12,7 +12,6 @@ def create_db_and_tables():
     try:
         with engine.connect() as connection:
             
-            # Check and add stripe_customer_id column
             result = connection.execute(text("""
                 SELECT column_name 
                 FROM information_schema.columns 
@@ -26,7 +25,6 @@ def create_db_and_tables():
                 """))
                 connection.commit()
             
-            # Check and add google_id column
             result = connection.execute(text("""
                 SELECT column_name 
                 FROM information_schema.columns 
@@ -40,7 +38,6 @@ def create_db_and_tables():
                 """))
                 connection.commit()
             
-            # Check and add auth_provider column
             result = connection.execute(text("""
                 SELECT column_name 
                 FROM information_schema.columns 
@@ -54,7 +51,6 @@ def create_db_and_tables():
                 """))
                 connection.commit()
             
-            # Make password column nullable for Google users
             result = connection.execute(text("""
                 SELECT is_nullable 
                 FROM information_schema.columns 
