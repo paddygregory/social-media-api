@@ -1,6 +1,4 @@
-import os, sys
 from contextlib import asynccontextmanager
-from sqlmodel import SQLModel
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -10,7 +8,7 @@ from app.routes.generate import generate_router
 from app.routes.payments import payments_router
 from app.routes.auth2 import auth_router
 from app.routes.google_auth import google_router
-from app.database import create_db_and_tables, get_or_create_user
+from app.database import create_db_and_tables
 
 
 @asynccontextmanager

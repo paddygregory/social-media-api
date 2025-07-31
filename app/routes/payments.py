@@ -41,7 +41,6 @@ def create_checkout(user_id: int, tier: str = "pro"):
         )
         return {"checkout_url": session.url}
     except Exception as e:
-        print(f"❌ CRASH inside create_checkout: {e}")
         raise HTTPException(status_code=500, detail=str(e))
            
 
@@ -77,23 +76,18 @@ def create_billing_portal(user_id: int):
             return {"portal_url": portal_session.url}
             
     except Exception as e:
-        print(f" CRASH inside billing portal: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @payments_router.post("/webhook")
 async def stripe_webhook(request: Request):
-    print("Stripe webhook received")
-
     try:
         payload = await request.body()
         sig_header = request.headers.get("stripe-signature")
         secret = os.getenv("STRIPE_WEBHOOK_SECRET")
 
         event = stripe.Webhook.construct_event(payload, sig_header, secret)
-        print(f"✅ Stripe event type: {event['type']} — ID: {event['id']}")
 
     except Exception as e:
-        print(f"❌ CRASH inside webhook: {e}")
         raise HTTPException(status_code=400, detail=f"Webhook error: {str(e)}")
 
     if event["type"] == "checkout.session.completed":
@@ -102,8 +96,6 @@ async def stripe_webhook(request: Request):
         tier = session_obj["metadata"].get("tier")
         customer_id = session_obj.get("customer")
 
-        print(f"➡️ Upgrading user {user_id} to {tier}...")
-
         with Session(engine) as session:
             user = session.get(User, int(user_id))  
             if user:
@@ -111,7 +103,6 @@ async def stripe_webhook(request: Request):
                 user.stripe_customer_id = customer_id
                 session.add(user)
                 session.commit()
-                print(f"✅ User {user_id} upgraded to {tier}")
 
     elif event["type"] == "customer.subscription.updated":
         subscription = event["data"]["object"]
@@ -127,7 +118,6 @@ async def stripe_webhook(request: Request):
                     pass
                 session.add(user)
                 session.commit()
-                print(f"✅ User {user.id} subscription updated")
 
     elif event["type"] == "customer.subscription.deleted":
         subscription = event["data"]["object"]
@@ -139,7 +129,6 @@ async def stripe_webhook(request: Request):
                 user.tier = "free"
                 session.add(user)
                 session.commit()
-                print(f" User {user.id} downgraded to free")
         
     return {"status": "success"}
 

@@ -1,7 +1,6 @@
 from sqlmodel import create_engine, Session, SQLModel, text, select
 import os
 from dotenv import load_dotenv
-import psycopg2
 from app.models import Post, Job, Feedback, User
 
 load_dotenv()
@@ -20,17 +19,13 @@ def create_db_and_tables():
             """))
             
             if not result.fetchone():
-                print("Adding stripe_customer_id column to user table")
                 connection.execute(text("""
                     ALTER TABLE "user" 
                     ADD COLUMN stripe_customer_id VARCHAR NULL;
                 """))
                 connection.commit()
-                print(" Successfully added stripe_customer_id column")
             
     except Exception as e:
-        print(f"Migration attempt: {e}")
-        
         pass
     
    

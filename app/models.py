@@ -1,10 +1,7 @@
-import os, sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from sqlmodel import SQLModel, Field, create_engine, Session
+from sqlmodel import SQLModel, Field
 from typing import Optional, Dict
 from datetime import datetime
-from sqlalchemy import JSON, Column, String, Boolean, Integer
-import psycopg2
+from sqlalchemy import JSON, Column, String, Boolean
 from pydantic import BaseModel
 
 

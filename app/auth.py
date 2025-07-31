@@ -3,7 +3,7 @@ from typing import Optional
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from fastapi import HTTPException, Depends
-from fastapi.security import OAuth2PasswordBearer
+
 from sqlmodel import Session
 from app.models import User
 from app.database import engine
@@ -40,12 +40,6 @@ def get_current_user(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme
         user_id = int(payload.get("sub"))
     except (JWTError, ValueError):
         raise credentials_exception
-
-    with Session(engine) as session:
-        user = session.get(User, user_id)
-        if not user:
-            raise credentials_exception
-        return user
 
     with Session(engine) as session:
         user = session.get(User, user_id)
