@@ -38,6 +38,6 @@ async def auth_google_callback(request: Request):
     user = await get_or_create_user(user_info)
     jwt = create_access_token({'sub': str(user.id)})
 
-    response = RedirectResponse(url=f"https://socialai.paddymgregory.com/login-success?token={jwt}")
+    response = RedirectResponse(url=f"https://socialai.paddymgregory.com/login-success#token={jwt}")
     return response
 
