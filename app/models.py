@@ -30,7 +30,9 @@ class User(SQLModel, table=True):
     id: int = Field(primary_key=True)
     name: str
     email: str
-    password: str
+    password: Optional[str]
+    google_id: Optional[str] = Field(default=None, sa_column=Column(String))
+    auth_provider: str = Field(default="local", sa_column=Column(String))
     tier: str = Field(default="free", sa_column=Column(String))
     stripe_customer_id: Optional[str] = Field(default=None, sa_column=Column(String))
     is_active: bool = Field(default=True, sa_column=Column(Boolean, nullable=False))
@@ -47,14 +49,3 @@ class FeedbackInput(BaseModel):
     name: str
     email: str
     feedback: str
-
-async def get_or_create_user(user_info: dict):
-    email = user_info.get('email')
-    name = user_info.get('name', 'User')
-
-    with Session(engine) as session:
-        user = session.exec(select(User).where(User.email==email)).first()
-        if not user:
-            user = User(email=email, full_name=name, auth_provider='google')
-            session.add(user)
-            
