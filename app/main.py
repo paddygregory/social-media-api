@@ -1,6 +1,8 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
+import os
 
 from app.routes.health import health_router
 from app.routes.template import template_router
@@ -19,6 +21,11 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+# Add session middleware for OAuth
+app.add_middleware(
+    SessionMiddleware, 
+    secret_key=os.getenv("JWT_SECRET_KEY", "supersecret")
+)
 
 app.add_middleware(
     CORSMiddleware,
