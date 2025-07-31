@@ -1,8 +1,8 @@
-from sqlmodel import create_engine, Session, SQLModel, text
+from sqlmodel import create_engine, Session, SQLModel, text, select
 import os
 from dotenv import load_dotenv
 import psycopg2
-from app.models import Post, Job, Feedback, User, get_or_create_user
+from app.models import Post, Job, Feedback, User
 
 load_dotenv()
 
@@ -35,3 +35,32 @@ def create_db_and_tables():
     
    
     SQLModel.metadata.create_all(engine)
+
+async def get_or_create_user(user_info: dict):
+    with Session(engine) as session:
+        user = session.exec(select(User).where(
+            (User.email == user_info.get('email')) |
+            (User.google_id == user_info['sub'])
+        )
+        ).first()
+
+        if user:
+            if not user.google_id:
+                user.google_id = user_info['sub']
+                user.auth_provider = 'google'
+                session.add(user)
+                session.commit()
+                session.refresh(user)
+            return user
+        
+        user = User(
+            email=user_info.get('email'),
+            name=user_info.get('name', 'User'),
+            google_id=user_info['sub'],
+            auth_provider='google',
+            tier='free'
+        )
+        session.add(user)
+        session.commit()
+        session.refresh(user)
+        return user 

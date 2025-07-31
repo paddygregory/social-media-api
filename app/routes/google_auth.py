@@ -40,3 +40,4 @@ async def auth_google_callback(request: Request):
 
     response = RedirectResponse(url=f"https://socialai.paddymgregory.com/login-success?token={jwt}")
     return response
+

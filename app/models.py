@@ -30,7 +30,7 @@ class User(SQLModel, table=True):
     id: int = Field(primary_key=True)
     name: str
     email: str
-    password: Optional[str]
+    password: Optional[str] = None
     google_id: Optional[str] = Field(default=None, sa_column=Column(String))
     auth_provider: str = Field(default="local", sa_column=Column(String))
     tier: str = Field(default="free", sa_column=Column(String))
