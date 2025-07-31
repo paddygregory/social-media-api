@@ -9,7 +9,7 @@ from app.routes.template import template_router
 from app.routes.generate import generate_router
 from app.routes.payments import payments_router
 from app.routes.auth2 import auth_router
-from app.database import create_db_and_tables
+from app.database import create_db_and_tables, get_or_create_user
 
 
 @asynccontextmanager
